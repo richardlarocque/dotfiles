@@ -1,9 +1,57 @@
-;; packages
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("org" . "http://orgmode.org/elpa/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
-(package-initialize)
+;; .emacs -- Richard's Emacs dotfile
+;;
+;;; Commentary:
+;; Here's a comment to keep the linter happy.
+
+;;; Code:
+
+
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
+
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+
+(setq my-packages
+      '(el-get
+        evil evil-leader
+        projectile flx
+        dedicated
+        autopair
+        magit
+        flycheck let-alist
+        flycheck-haskell haskell-mode
+        jade-mode js2-mode
+        flymake-sass sass-mode
+        handlebars-mode haml-mode
+        nix-mode))
+
+(el-get 'sync my-packages)
+
+;; (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+;;                          ("org" . "http://orgmode.org/elpa/")
+;;                          ("marmalade" . "http://marmalade-repo.org/packages/")
+;;                          ("melpa" . "http://melpa.milkbox.net/packages/")))
+;; (package-initialize)
+
+;; (ensure-package-initialized
+;;  'evil 'evil-leader
+;;  'flx-ido
+;;  'projectile
+;;  'dedicated
+;;  'autopair
+;;  'magit
+;;  'flycheck-haskell 'haskell-mode
+;;  'sws-mode 'jade-mode 'js2-mode
+;;  'flymake-sass 'sass-mode
+;;  'handlebars-mode 'haml-mode
+;;  )
+
 
 (set-face-attribute 'default nil :height 90)
 (load-theme 'deeper-blue t)
@@ -16,7 +64,6 @@
 
 (setq tab-width 8)
 
-(add-to-list 'load-path "~/.emacs.d/evil")
 (require 'evil)
 (evil-mode 1)
 
@@ -117,17 +164,15 @@
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
-; Jade support
-(require 'sws-mode)
-(require 'jade-mode)
-(add-to-list 'auto-mode-alist '("\\.styl$" . sws-mode))
-(add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
-
-(add-hook 'jade-mode-hook
-	  (lambda()
-	    (setq sws-tab-width 2)
-	    (setq indent-tabs-mode nil)
-	    ))
+; ;; ; Jade support
+; (require 'jade-mode)
+; (add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
+;
+; (add-hook 'jade-mode-hook
+; 	  (lambda()
+; 	    (setq sws-tab-width 2)
+; 	    (setq indent-tabs-mode nil)
+; 	    ))
 
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
