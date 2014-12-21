@@ -6,5 +6,3 @@ filetype plugin indent on
 
 nmap <Tab> :cnext<CR>
 nmap <S-Tab> :cprev<CR>
-
-execute pathogen#infect()
