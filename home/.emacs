@@ -189,9 +189,9 @@
  '(haskell-tags-on-save t)
  '(haskell-stylish-on-save t))
 
-(require 'w3m-load)
-(require 'w3m-haddock)
-(add-hook 'w3m-display-hook 'w3m-haddock-display)
+; (require 'w3m-load)
+; (require 'w3m-haddock)
+; (add-hook 'w3m-display-hook 'w3m-haddock-display)
 
 (evil-define-key 'normal haskell-mode-map (kbd "`") 'haskell-interactive-bring)
 (evil-define-key 'insert haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)
