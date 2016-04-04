@@ -26,32 +26,16 @@
         magit
         flycheck let-alist
         flycheck-haskell haskell-mode
-        jade-mode js2-mode
+        jade-mode
+        web-mode
         flymake-sass sass-mode
         handlebars-mode haml-mode
-        nix-mode))
+        nix-mode
+        go-mode
+        markdown-mode
+        ))
 
 (el-get 'sync my-packages)
-
-;; (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-;;                          ("org" . "http://orgmode.org/elpa/")
-;;                          ("marmalade" . "http://marmalade-repo.org/packages/")
-;;                          ("melpa" . "http://melpa.milkbox.net/packages/")))
-;; (package-initialize)
-
-;; (ensure-package-initialized
-;;  'evil 'evil-leader
-;;  'flx-ido
-;;  'projectile
-;;  'dedicated
-;;  'autopair
-;;  'magit
-;;  'flycheck-haskell 'haskell-mode
-;;  'sws-mode 'jade-mode 'js2-mode
-;;  'flymake-sass 'sass-mode
-;;  'handlebars-mode 'haml-mode
-;;  )
-
 
 (set-face-attribute 'default nil :height 90)
 (load-theme 'deeper-blue t)
@@ -60,9 +44,12 @@
 (setq inhibit-splash-screen t)
 (setq column-number-mode t)
 
-(setq make-backup-files nil)
+(setq mouse-drag-copy-region t)
 
-(setq tab-width 8)
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+
+(setq-default tab-width 4)
 
 (require 'evil)
 (evil-mode 1)
@@ -146,23 +133,22 @@
 (require 'dedicated)
 (global-set-key (kbd "C-l") 'dedicated-mode)
 
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
-
-(require 'magit)
+; (require 'magit)
 (delete 'Git vc-handled-backends)
 
-(require 'js2-mode)
-(add-hook 'js2-mode-hook
-	  (lambda()
-	    (setq js-indent-level 2)
-	    (setq indent-tabs-mode nil)
-	    ))
+(setq-default indent-tabs-mode nil)
 
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+; (require 'js-mode)
+; (add-hook 'js-mode-hook
+(setq js-indent-level 2)
+
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+(setq web-mode-content-types-alist '(("jsx"  . "\\.jsx\\'")))
+
+(add-hook 'web-mode-hook (setq web-mode-markup-indent-offset 2))
+(add-hook 'web-mode-hook (setq web-mode-css-indent-offset 2))
+(add-hook 'web-mode-hook (setq web-mode-code-indent-offset 2))
 
 ; ;; ; Jade support
 ; (require 'jade-mode)
@@ -179,12 +165,7 @@
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 
 (custom-set-variables
- '(haskell-process-suggest-remove-import-lines t)
- '(haskell-process-auto-import-loaded-modules t)
- '(haskell-process-log t))
-
-(custom-set-variables
- '(haskell-process-type 'ghci)
+ '(haskell-process-type 'cabal-repl)
  '(haskell-notify-p t)
  '(haskell-tags-on-save t)
  '(haskell-stylish-on-save t))
@@ -192,9 +173,6 @@
 ; (require 'w3m-load)
 ; (require 'w3m-haddock)
 ; (add-hook 'w3m-display-hook 'w3m-haddock-display)
-
-(evil-define-key 'normal haskell-mode-map (kbd "`") 'haskell-interactive-bring)
-(evil-define-key 'insert haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)
 
 (dolist (m '(haskell-mode cabal-mode haskell-interactive-mode))
   (evil-leader/set-key-for-mode m "l" 'haskell-process-load-or-reload)
